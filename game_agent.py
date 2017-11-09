@@ -214,7 +214,14 @@ class MinimaxPlayer(IsolationPlayer):
 
         # TODO: finish this function!
         raise NotImplementedError
-
+    def max_value(self, game):
+        pass
+    
+    def min_value(self, game):
+        pass
+    
+    def terminal_state(self, game):
+        pass
 
 class AlphaBetaPlayer(IsolationPlayer):
     """Game-playing agent that chooses a move using iterative deepening minimax
