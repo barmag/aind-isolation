@@ -35,7 +35,14 @@ def custom_score(game, player):
         The heuristic value of the current game state to the specified player.
     """
     # TODO: finish this function!
-    raise NotImplementedError
+    if game.is_winner(player) or game.is_loser(player):
+        return game.utility(player) 
+
+    moves = len(game.get_legal_moves())
+
+    opp_moves = len(game.get_legal_moves(game.get_opponent(player)))
+
+    return float(moves - opp_moves)
 
 
 def custom_score_2(game, player):
@@ -212,7 +219,14 @@ class MinimaxPlayer(IsolationPlayer):
         if self.time_left() < self.TIMER_THRESHOLD:
             raise SearchTimeout()
 
-        move = max(game.get_legal_moves(), key=lambda m: self.min_value(game.forecast_move(m), game.active_player, depth))
+        #print (game.active_player)
+        player = game.get_opponent(game.active_player)
+        moves = game.get_legal_moves()
+        print(moves)
+        if not moves:
+            return (-1, -1)
+        move = max(moves, key=lambda m: self.min_value(game.forecast_move(m), player, depth))
+        #print(move)
         return move
 
     def max_value(self, game, player, depth):
@@ -226,7 +240,11 @@ class MinimaxPlayer(IsolationPlayer):
         if self.terminal_state(game, depth):
             return self.score(game, player)
 
-        v = max(map(lambda m : self.min_value(game, game.get_opponent(player), depth), game.get_legal_moves()))
+        # v = max(map(lambda m : self.min_value(game, game.get_opponent(player), depth), game.get_legal_moves()))
+        v = -float('inf')
+        for a in game.get_legal_moves():
+            v = max(v, self.min_value(game.forecast_move(a), game.get_opponent(player), depth))
+        
         return v
     
     def min_value(self, game, player, depth):
@@ -238,7 +256,12 @@ class MinimaxPlayer(IsolationPlayer):
         depth = depth - 1
         if self.terminal_state(game, depth):
             return self.score(game, player)
-        v = min(map(lambda m : self.max_value(game, game.get_opponent(player), depth), game.get_legal_moves()))
+        
+        # v = min(map(lambda m : self.max_value(game, game.get_opponent(player), depth), game.get_legal_moves()))
+
+        v = float('inf')
+        for a in game.get_legal_moves():
+            v = min(v, self.max_value(game.forecast_move(a), game.get_opponent(player), depth))
         return v
     
     def terminal_state(self, game, depth):
@@ -247,7 +270,12 @@ class MinimaxPlayer(IsolationPlayer):
         if self.time_left() < self.TIMER_THRESHOLD:
             raise SearchTimeout()
 
-        return depth < 0
+        if depth <= 0:
+            return True
+        moves = game.get_legal_moves()
+        if not moves:
+            return True
+        return False
 
 class AlphaBetaPlayer(IsolationPlayer):
     """Game-playing agent that chooses a move using iterative deepening minimax
