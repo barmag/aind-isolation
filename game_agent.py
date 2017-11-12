@@ -212,7 +212,7 @@ class MinimaxPlayer(IsolationPlayer):
         if self.time_left() < self.TIMER_THRESHOLD:
             raise SearchTimeout()
 
-        move = max(game.get_legal_moves(), key=lambda m: self.min_value(game.forecast_move(m), player, depth))
+        move = max(game.get_legal_moves(), key=lambda m: self.min_value(game.forecast_move(m), game.active_player, depth))
         return move
 
     def max_value(self, game, player, depth):
@@ -247,7 +247,7 @@ class MinimaxPlayer(IsolationPlayer):
         if self.time_left() < self.TIMER_THRESHOLD:
             raise SearchTimeout()
 
-        return depth <= 0
+        return depth < 0
 
 class AlphaBetaPlayer(IsolationPlayer):
     """Game-playing agent that chooses a move using iterative deepening minimax
