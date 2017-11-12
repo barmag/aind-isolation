@@ -225,11 +225,11 @@ class MinimaxPlayer(IsolationPlayer):
         print(moves)
         if not moves:
             return (-1, -1)
-        move = max(moves, key=lambda m: self.min_value(game.forecast_move(m), player, depth))
+        move = max(moves, key=lambda m: self.min_value(game.forecast_move(m), depth))
         #print(move)
         return move
 
-    def max_value(self, game, player, depth):
+    def max_value(self, game, depth):
         """ Return the value of score if the game is over,
         otherwise return the max value over all legal children
         """
@@ -238,16 +238,12 @@ class MinimaxPlayer(IsolationPlayer):
 
         depth = depth - 1
         if self.terminal_state(game, depth):
-            return self.score(game, player)
+            return self.score(game, self)
 
-        # v = max(map(lambda m : self.min_value(game, game.get_opponent(player), depth), game.get_legal_moves()))
-        v = -float('inf')
-        for a in game.get_legal_moves():
-            v = max(v, self.min_value(game.forecast_move(a), game.get_opponent(player), depth))
-        
+        v = max(map(lambda m : self.min_value(game.forecast_move(m), depth), game.get_legal_moves()))
         return v
     
-    def min_value(self, game, player, depth):
+    def min_value(self, game, depth):
         """ Return the value of score if the game is over,
         otherwise return the min value over all legal children
         """
@@ -255,13 +251,9 @@ class MinimaxPlayer(IsolationPlayer):
             raise SearchTimeout()
         depth = depth - 1
         if self.terminal_state(game, depth):
-            return self.score(game, player)
+            return self.score(game, self)
         
-        # v = min(map(lambda m : self.max_value(game, game.get_opponent(player), depth), game.get_legal_moves()))
-
-        v = float('inf')
-        for a in game.get_legal_moves():
-            v = min(v, self.max_value(game.forecast_move(a), game.get_opponent(player), depth))
+        v = min(map(lambda m : self.max_value(game.forecast_move(m), depth), game.get_legal_moves()))
         return v
     
     def terminal_state(self, game, depth):
