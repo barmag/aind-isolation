@@ -380,14 +380,43 @@ class AlphaBetaPlayer(IsolationPlayer):
 
         return best_action
 
-    def max_value(self, game, depth, alph, beta):
+    def max_value(self, game, depth, alpha, beta):
         if self.time_left() < self.TIMER_THRESHOLD:
             raise SearchTimeout()
 
-        
+        if self.terminal_state():
+            return self.score(game, self)
+        v = float('-inf')
+        for a in game.get_legal_moves():
+            v = max(v, self.min_value(game.forecast_move(a), depth-1, alpha, beta))
+            if v >= beta:
+                return v
+            alpha = max(alpha, v)
+        return v
     
     def min_value(self, game, depth, alpha, beta):
         if self.time_left() < self.TIMER_THRESHOLD:
             raise SearchTimeout()
 
-        pass
+        if self.terminal_state():
+            return self.score(game, self)
+        v = float('inf')
+        for a in game.get_legal_moves():
+            v = min(v, self.max_value(game.forecast_move(a), depth-1, alpha, beta))
+            if v <= alpha:
+                return v
+            beta = min(beta, v)
+        return v
+
+    def terminal_state(self, game, depth):
+        """ Return true if we reached maximum depth
+        """
+        if self.time_left() < self.TIMER_THRESHOLD:
+            raise SearchTimeout()
+
+        if depth <= 0:
+            return True
+        moves = game.get_legal_moves()
+        if not moves:
+            return True
+        return False
