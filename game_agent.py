@@ -372,3 +372,15 @@ class AlphaBetaPlayer(IsolationPlayer):
             raise SearchTimeout()
 
         return (-1, -1)
+
+    def max_value(self, game, depth, alph, beta):
+        if self.time_left() < self.TIMER_THRESHOLD:
+            raise SearchTimeout()
+
+        pass
+    
+    def min_value(self, game, depth, alpha, beta):
+        if self.time_left() < self.TIMER_THRESHOLD:
+            raise SearchTimeout()
+            
+        pass
