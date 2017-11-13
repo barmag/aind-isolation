@@ -384,7 +384,7 @@ class AlphaBetaPlayer(IsolationPlayer):
         if self.time_left() < self.TIMER_THRESHOLD:
             raise SearchTimeout()
 
-        if self.terminal_state():
+        if self.terminal_state(game, depth):
             return self.score(game, self)
         v = float('-inf')
         for a in game.get_legal_moves():
@@ -398,7 +398,7 @@ class AlphaBetaPlayer(IsolationPlayer):
         if self.time_left() < self.TIMER_THRESHOLD:
             raise SearchTimeout()
 
-        if self.terminal_state():
+        if self.terminal_state(game, depth):
             return self.score(game, self)
         v = float('inf')
         for a in game.get_legal_moves():
