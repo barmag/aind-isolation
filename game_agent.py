@@ -228,7 +228,7 @@ class MinimaxPlayer(IsolationPlayer):
         #print (game.active_player)
         player = game.get_opponent(game.active_player)
         moves = game.get_legal_moves()
-        print(moves)
+        # print(moves)
         if not moves:
             return (-1, -1)
         move = max(moves, key=lambda m: self.min_value(game.forecast_move(m), depth))
