@@ -67,11 +67,14 @@ def custom_score_2(game, player):
     float
         The heuristic value of the current game state to the specified player.
     """
+    if game.is_winner(player) or game.is_loser(player):
+        return game.utility(player) 
+
     moves = len(game.get_legal_moves())
 
     opp_moves = len(game.get_legal_moves(game.get_opponent(player)))
 
-    return float(moves - opp_moves)
+    return float(2*moves - opp_moves)
 
 
 def custom_score_3(game, player):
@@ -96,6 +99,8 @@ def custom_score_3(game, player):
     float
         The heuristic value of the current game state to the specified player.
     """
+    if game.is_winner(player) or game.is_loser(player):
+        return game.utility(player) 
     moves = len(game.get_legal_moves())
 
     opp_moves = len(game.get_legal_moves(game.get_opponent(player)))
@@ -178,6 +183,7 @@ class MinimaxPlayer(IsolationPlayer):
             return self.minimax(game, self.search_depth)
 
         except SearchTimeout:
+            print('minimax timeout')
             pass  # Handle any actions required after timeout as needed
 
         # Return the best move from the last completed search iteration
@@ -231,9 +237,10 @@ class MinimaxPlayer(IsolationPlayer):
         # print(moves)
         if not moves:
             return (-1, -1)
-        move = max(moves, key=lambda m: self.min_value(game.forecast_move(m), depth))
+        best_move = moves[0]
+        best_move = max(moves, key=lambda m: self.min_value(game.forecast_move(m), depth))
         #print(move)
-        return move
+        return best_move
 
     def max_value(self, game, depth):
         """ Return the value of score if the game is over,
@@ -378,9 +385,11 @@ class AlphaBetaPlayer(IsolationPlayer):
         """
         if self.time_left() < self.TIMER_THRESHOLD:
             raise SearchTimeout()
-        
-        best_action = None
-        for a in game.get_legal_moves():
+        moves = game.get_legal_moves()
+        if not moves:
+            return (-1, -1)
+        best_action = moves[0]
+        for a in moves:
             v = self.min_value(game.forecast_move(a), depth-1, alpha, beta)
             if v > alpha:
                 alpha = v
