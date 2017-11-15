@@ -68,13 +68,16 @@ def custom_score_2(game, player):
         The heuristic value of the current game state to the specified player.
     """
     if game.is_winner(player) or game.is_loser(player):
+        # print('end of tree')
         return game.utility(player) 
+
+    return 0
 
     moves = len(game.get_legal_moves())
 
     opp_moves = len(game.get_legal_moves(game.get_opponent(player)))
 
-    return float(2*moves - opp_moves)
+    return min(float(2*moves - opp_moves), float(moves - 2*opp_moves))
 
 
 def custom_score_3(game, player):
@@ -104,11 +107,11 @@ def custom_score_3(game, player):
     moves = len(game.get_legal_moves())
 
     opp_moves = len(game.get_legal_moves(game.get_opponent(player)))
-    w, h = game.width / 2., game.height / 2.
-    y, x = game.get_player_location(player)
-    center_w = float((h - y)**2 + (w - x)**2)/4
+    # w, h = game.width / 2., game.height / 2.
+    # y, x = game.get_player_location(player)
+    # center_w = float((h - y)**2 + (w - x)**2)/4
 
-    return float(moves - opp_moves) * center_w
+    return (float(2*moves - opp_moves) + float(moves - 2*opp_moves))
 
 
 class IsolationPlayer:
@@ -327,14 +330,20 @@ class AlphaBetaPlayer(IsolationPlayer):
         # in case the search fails due to timeout
         self.best_move = (-1, -1)
         max_depth = 49
+        self.d = 0
         try:
             # The try/except block will automatically catch the exception
             # raised when the timer is about to expire.
             # return self.alphabeta(game, self.search_depth)
             for d in range(1, max_depth):
                 self.best_move = self.alphabeta(game, d)
+                if self.best_move == (-1,-1):
+                    # print('out of moves')
+                    break
+                self.d = d
 
         except SearchTimeout:
+            # print ("explored depth {}".format(self.d))
             return self.best_move  # Handle any actions required after timeout as needed
 
         # Return the best move from the last completed search iteration
