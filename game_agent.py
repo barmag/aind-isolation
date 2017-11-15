@@ -106,7 +106,7 @@ def custom_score_3(game, player):
     opp_moves = len(game.get_legal_moves(game.get_opponent(player)))
     w, h = game.width / 2., game.height / 2.
     y, x = game.get_player_location(player)
-    center_w = float((h - y)**2 + (w - x)**2)
+    center_w = float((h - y)**2 + (w - x)**2)/4
 
     return float(moves - opp_moves) * center_w
 
