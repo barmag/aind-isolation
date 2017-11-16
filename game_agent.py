@@ -104,10 +104,10 @@ def custom_score_3(game, player):
     """
     if game.is_winner(player) or game.is_loser(player):
         return game.utility(player) 
-    moves = len(game.get_legal_moves())
+    # moves = len(game.get_legal_moves())
     
     opponent = game.get_opponent(player)
-    opp_moves = len(game.get_legal_moves(opponent))
+    # opp_moves = len(game.get_legal_moves(opponent))
     # w, h = game.width / 2., game.height / 2.
     # y, x = game.get_player_location(player)
     # center_w = float((h - y)**2 + (w - x)**2)/4
@@ -120,7 +120,7 @@ def custom_score_3(game, player):
 
     # return (float(2*moves - opp_moves) + float(moves - 2*opp_moves) + float(moves-opp_moves))
     # maximize distance between players 36% win rate (bad)
-    return float(1.5*moves-opp_moves) + blanks_in_proximity
+    return float(blanks_in_proximity)
 
 
 class IsolationPlayer:
