@@ -116,8 +116,8 @@ def custom_score_3(game, player):
     distance = ((my_loc_x-opp_loc_x) ** 2) + ((my_loc_y-opp_loc_y) ** 2)
 
     # return (float(2*moves - opp_moves) + float(moves - 2*opp_moves) + float(moves-opp_moves))
-    # minimize distance between players 46% win rate (bad)
-    return float(moves-opp_moves) + distance
+    # maximize distance between players 36% win rate (bad)
+    return float(moves-opp_moves) - distance
 
 
 class IsolationPlayer:
