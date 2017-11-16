@@ -112,12 +112,15 @@ def custom_score_3(game, player):
     # y, x = game.get_player_location(player)
     # center_w = float((h - y)**2 + (w - x)**2)/4
     my_loc_x, my_loc_y = game.get_player_location(player)
-    opp_loc_x, opp_loc_y = game.get_player_location(opponent)
-    distance = ((my_loc_x-opp_loc_x) ** 2) + ((my_loc_y-opp_loc_y) ** 2)
+    # opp_loc_x, opp_loc_y = game.get_player_location(opponent)
+    # distance = ((my_loc_x-opp_loc_x) ** 2) + ((my_loc_y-opp_loc_y) ** 2)
+    open_locations = game.get_blank_spaces()
+    blanks_in_proximity = len([(i, j) for i in range(-2,2) for j in range(-2,2) if (my_loc_x+i, my_loc_y+j) in open_locations])
+    #print("blanks {}".format(blanks_in_proximity))
 
     # return (float(2*moves - opp_moves) + float(moves - 2*opp_moves) + float(moves-opp_moves))
     # maximize distance between players 36% win rate (bad)
-    return float(moves-opp_moves) - distance
+    return float(1.5*moves-opp_moves) + blanks_in_proximity
 
 
 class IsolationPlayer:
