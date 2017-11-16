@@ -71,13 +71,24 @@ def custom_score_2(game, player):
         #print('end of tree')
         return game.utility(player) 
 
-    
-
     moves = len(game.get_legal_moves())
+    opponent = game.get_opponent(player)
+    opp_moves = len(game.get_legal_moves(opponent))
+    # w, h = game.width / 2., game.height / 2.
+    # y, x = game.get_player_location(player)
+    # center_w = float((h - y)**2 + (w - x)**2)/4
+    my_loc_x, my_loc_y = game.get_player_location(player)
+    opp_loc_x, opp_loc_y = game.get_player_location(opponent)
+    # distance = ((my_loc_x-opp_loc_x) ** 2) + ((my_loc_y-opp_loc_y) ** 2)
+    open_locations = game.get_blank_spaces()
+    print("open locations {}".format(len(open_locations)))
+    blanks_in_proximity = len([(i, j) for i in range(-2,2) for j in range(-2,2) if (my_loc_x+i, my_loc_y+j) in open_locations])
+    opp_blanks_in_proximity = len([(i, j) for i in range(-2,2) for j in range(-2,2) if (opp_loc_x+i, opp_loc_y+j) in open_locations])
+    #print("blanks {}".format(blanks_in_proximity))
 
-    opp_moves = len(game.get_legal_moves(game.get_opponent(player)))
-
-    return max(float(1.4*moves - opp_moves), float(moves - 1.2*opp_moves))
+    # return (float(2*moves - opp_moves) + float(moves - 2*opp_moves) + float(moves-opp_moves))
+    # use only blanks in proximity, win rate 45% against AB_Improved (bad)
+    return float(moves-opp_moves) + float(blanks_in_proximity-opp_blanks_in_proximity)
 
 
 def custom_score_3(game, player):
@@ -112,15 +123,16 @@ def custom_score_3(game, player):
     # y, x = game.get_player_location(player)
     # center_w = float((h - y)**2 + (w - x)**2)/4
     my_loc_x, my_loc_y = game.get_player_location(player)
-    # opp_loc_x, opp_loc_y = game.get_player_location(opponent)
+    opp_loc_x, opp_loc_y = game.get_player_location(opponent)
     # distance = ((my_loc_x-opp_loc_x) ** 2) + ((my_loc_y-opp_loc_y) ** 2)
     open_locations = game.get_blank_spaces()
     blanks_in_proximity = len([(i, j) for i in range(-2,2) for j in range(-2,2) if (my_loc_x+i, my_loc_y+j) in open_locations])
+    opp_blanks_in_proximity = len([(i, j) for i in range(-2,2) for j in range(-2,2) if (opp_loc_x+i, opp_loc_y+j) in open_locations])
     #print("blanks {}".format(blanks_in_proximity))
 
     # return (float(2*moves - opp_moves) + float(moves - 2*opp_moves) + float(moves-opp_moves))
-    # maximize distance between players 36% win rate (bad)
-    return float(blanks_in_proximity)
+    # use only blanks in proximity, win rate 45% against AB_Improved (bad)
+    return float(blanks_in_proximity-opp_blanks_in_proximity)
 
 
 class IsolationPlayer:
