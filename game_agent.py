@@ -68,16 +68,16 @@ def custom_score_2(game, player):
         The heuristic value of the current game state to the specified player.
     """
     if game.is_winner(player) or game.is_loser(player):
-        # print('end of tree')
+        #print('end of tree')
         return game.utility(player) 
 
-    return 0
+    
 
     moves = len(game.get_legal_moves())
 
     opp_moves = len(game.get_legal_moves(game.get_opponent(player)))
 
-    return min(float(2*moves - opp_moves), float(moves - 2*opp_moves))
+    return max(float(1.4*moves - opp_moves), float(moves - 1.2*opp_moves))
 
 
 def custom_score_3(game, player):
@@ -111,7 +111,7 @@ def custom_score_3(game, player):
     # y, x = game.get_player_location(player)
     # center_w = float((h - y)**2 + (w - x)**2)/4
 
-    return (float(2*moves - opp_moves) + float(moves - 2*opp_moves))
+    return (float(2*moves - opp_moves) + float(moves - 2*opp_moves) + float(moves-opp_moves))
 
 
 class IsolationPlayer:
