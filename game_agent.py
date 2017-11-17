@@ -123,7 +123,7 @@ def custom_score_3(game, player):
 
     #beginning of the game
     if len(open_locations) > (game.width*game.height)-12:
-        return len(game.get_legal_moves(player))
+        return -len(game.get_legal_moves(opponent))
 
     # mid game
     # if len(open_locations) > game.width*game.height/2:
