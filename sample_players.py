@@ -260,8 +260,8 @@ if __name__ == "__main__":
 
     # create an isolation board (by default 7x7)
     # player1 = RandomPlayer()
-    player2 = AlphaBetaPlayer(score_fn=custom_score_3) #MinimaxPlayer()
-    player1 = AlphaBetaPlayer(score_fn=improved_score) #GreedyPlayer()
+    player1 = AlphaBetaPlayer(score_fn=custom_score_3) #MinimaxPlayer()
+    player2 = AlphaBetaPlayer(score_fn=improved_score) #GreedyPlayer()
     game = Board(player1, player2)
 
     # place player 1 on the board at row 2, column 3, then place player 2 on

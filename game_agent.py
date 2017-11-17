@@ -42,7 +42,7 @@ def custom_score(game, player):
 
     opp_moves = len(game.get_legal_moves(game.get_opponent(player)))
 
-    return float(- opp_moves)
+    return float(-opp_moves)
 
 
 def custom_score_2(game, player):
@@ -81,14 +81,16 @@ def custom_score_2(game, player):
     opp_loc_x, opp_loc_y = game.get_player_location(opponent)
     # distance = ((my_loc_x-opp_loc_x) ** 2) + ((my_loc_y-opp_loc_y) ** 2)
     open_locations = game.get_blank_spaces()
-    print("open locations {}".format(len(open_locations)))
+    #print("open locations {}".format(len(open_locations)))
     blanks_in_proximity = len([(i, j) for i in range(-2,2) for j in range(-2,2) if (my_loc_x+i, my_loc_y+j) in open_locations])
     opp_blanks_in_proximity = len([(i, j) for i in range(-2,2) for j in range(-2,2) if (opp_loc_x+i, opp_loc_y+j) in open_locations])
     #print("blanks {}".format(blanks_in_proximity))
-
     # return (float(2*moves - opp_moves) + float(moves - 2*opp_moves) + float(moves-opp_moves))
+    # moves_ahead = sum([len(game.forecast_move(m).get_legal_moves(opponent)) for m in game.get_legal_moves()])
+    # opp_moves_head = sum([len(game.forecast_move(m).get_legal_moves(player)) for m in game.get_legal_moves(opponent)])
     # use only blanks in proximity, win rate 45% against AB_Improved (bad)
     return float(moves-opp_moves) + float(blanks_in_proximity-opp_blanks_in_proximity)
+    # return float(moves-opp_moves) + float(moves_ahead-opp_moves_head)
 
 
 def custom_score_3(game, player):
@@ -120,22 +122,13 @@ def custom_score_3(game, player):
     opponent = game.get_opponent(player)
 
     #beginning of the game
-    if len(open_locations) > game.width*game.height*2/3:
+    if len(open_locations) > (game.width*game.height)-12:
         return len(game.get_legal_moves(player))
 
     # mid game
-    if len(open_locations) > game.width*game.height/2:
-        return float(2*len(game.get_legal_moves(player))-len(game.get_legal_moves(opponent)))
-    
-    my_loc_x, my_loc_y = game.get_player_location(player)
-    opp_loc_x, opp_loc_y = game.get_player_location(opponent)
-    blanks_in_proximity = len([(i, j) for i in range(-2,2) for j in range(-2,2) if (my_loc_x+i, my_loc_y+j) in open_locations])
-    opp_blanks_in_proximity = len([(i, j) for i in range(-2,2) for j in range(-2,2) if (opp_loc_x+i, opp_loc_y+j) in open_locations])
-    #print("blanks {}".format(blanks_in_proximity))
-
-    # return (float(2*moves - opp_moves) + float(moves - 2*opp_moves) + float(moves-opp_moves))
-    # hybrid evaluation 46% against AB_Improved (bad)
-    return float(2*len(game.get_legal_moves(player))-len(game.get_legal_moves(opponent))) + float(blanks_in_proximity-opp_blanks_in_proximity)
+    # if len(open_locations) > game.width*game.height/2:
+    else:
+        return float(len(game.get_legal_moves(player))-len(game.get_legal_moves(opponent)))
 
 
 class IsolationPlayer:
