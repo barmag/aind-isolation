@@ -116,16 +116,22 @@ def custom_score_3(game, player):
     if game.is_winner(player) or game.is_loser(player):
         return game.utility(player) 
     # moves = len(game.get_legal_moves())
-    
+    open_locations = game.get_blank_spaces()
     opponent = game.get_opponent(player)
-    # opp_moves = len(game.get_legal_moves(opponent))
-    # w, h = game.width / 2., game.height / 2.
-    # y, x = game.get_player_location(player)
-    # center_w = float((h - y)**2 + (w - x)**2)/4
+
+    #beginning of the game
+    if len(open_locations) > game.width*game.height*2/3:
+        print("b")
+        return len(game.get_legal_moves(player))
+
+    # mid game
+    if len(open_locations) > game.width*game.height/2:
+        print("m")
+        return float(len(game.get_legal_moves(player))-len(game.get_legal_moves(opponent)))
+    
+    print("e")
     my_loc_x, my_loc_y = game.get_player_location(player)
     opp_loc_x, opp_loc_y = game.get_player_location(opponent)
-    # distance = ((my_loc_x-opp_loc_x) ** 2) + ((my_loc_y-opp_loc_y) ** 2)
-    open_locations = game.get_blank_spaces()
     blanks_in_proximity = len([(i, j) for i in range(-2,2) for j in range(-2,2) if (my_loc_x+i, my_loc_y+j) in open_locations])
     opp_blanks_in_proximity = len([(i, j) for i in range(-2,2) for j in range(-2,2) if (opp_loc_x+i, opp_loc_y+j) in open_locations])
     #print("blanks {}".format(blanks_in_proximity))
