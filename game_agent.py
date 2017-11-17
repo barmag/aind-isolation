@@ -121,15 +121,12 @@ def custom_score_3(game, player):
 
     #beginning of the game
     if len(open_locations) > game.width*game.height*2/3:
-        print("b")
         return len(game.get_legal_moves(player))
 
     # mid game
     if len(open_locations) > game.width*game.height/2:
-        print("m")
-        return float(len(game.get_legal_moves(player))-len(game.get_legal_moves(opponent)))
+        return float(2*len(game.get_legal_moves(player))-len(game.get_legal_moves(opponent)))
     
-    print("e")
     my_loc_x, my_loc_y = game.get_player_location(player)
     opp_loc_x, opp_loc_y = game.get_player_location(opponent)
     blanks_in_proximity = len([(i, j) for i in range(-2,2) for j in range(-2,2) if (my_loc_x+i, my_loc_y+j) in open_locations])
@@ -137,8 +134,8 @@ def custom_score_3(game, player):
     #print("blanks {}".format(blanks_in_proximity))
 
     # return (float(2*moves - opp_moves) + float(moves - 2*opp_moves) + float(moves-opp_moves))
-    # use only blanks in proximity, win rate 45% against AB_Improved (bad)
-    return float(blanks_in_proximity-opp_blanks_in_proximity)
+    # hybrid evaluation 46% against AB_Improved (bad)
+    return float(2*len(game.get_legal_moves(player))-len(game.get_legal_moves(opponent))) + float(blanks_in_proximity-opp_blanks_in_proximity)
 
 
 class IsolationPlayer:
